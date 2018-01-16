@@ -31,6 +31,9 @@ data:
     - ip: 192.168.77.1
       names:
         - registry
+    - ip: 172.16.1.4
+      names:
+        - node1
 
 #  proxy:
 #    url: http://proxy.example.com:8080
