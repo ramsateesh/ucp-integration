@@ -851,7 +851,7 @@ data:
     pod:
       replicas:
         ingress: 2
-        error_page: 2
+        error_page: 0
   source:
     type: git
     location: https://github.com/openstack/openstack-helm
