@@ -16,8 +16,7 @@ data:
       - kubernetes-etcd.kube-system.svc.cluster.local
       - kubernetes.default.svc.cluster.local
     upstream_servers:
-      - 8.8.8.8
-      - 8.8.4.4
+      - 135.75.88.250
 
   kubernetes:
     pod_cidr: 10.97.0.0/16
@@ -35,8 +34,8 @@ data:
       names:
         - node1
 
-#  proxy:
-#    url: http://proxy.example.com:8080
+  proxy:
+    url: http://one.proxy.att.com:8888/
 #    additional_no_proxy:
 #      - 10.0.1.1
 ...

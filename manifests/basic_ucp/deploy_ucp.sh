@@ -23,8 +23,8 @@ function init_env {
     export MAAS_NODE_PORT=${MAAS_NODE_PORT:-31900}
     export MASTER_NODE_IP=${MASTER_NODE_IP:-"NA"}
     export NODE_NET_IFACE=${NODE_NET_IFACE:-"eth0"}
-    export PROXY_ADDRESS=${PROXY_ADDRESS:-"http://one.proxy.att.com:8080"}
-    export PROXY_ENABLED=${PROXY_ENABLED:-"false"}
+    export PROXY_ADDRESS=${PROXY_ADDRESS:-"http://one.proxy.att.com:8888"}
+    export PROXY_ENABLED=${PROXY_ENABLED:-"true"}
     export AIRFLOW_NODE_PORT=${AIRFLOW_NODE_PORT:-32080}
     export SHIPYARD_NODE_PORT=${SHIPYARD_NODE_PORT:-31901}
     export ARMADA_NODE_PORT=${ARMADA_NODE_PORT:-31903}
@@ -163,8 +163,8 @@ function genesis {
       export https_proxy=$PROXY_ADDRESS
       export HTTP_PROXY=$PROXY_ADDRESS
       export HTTPS_PROXY=$PROXY_ADDRESS
-      echo '  proxy:' >> configs/KubernetesNetwork.yaml
-      echo "    url: ${PROXY_ADDRESS}" >> configs/KubernetesNetwork.yaml
+      #echo '  proxy:' >> configs/KubernetesNetwork.yaml
+      #echo "    url: ${PROXY_ADDRESS}" >> configs/KubernetesNetwork.yaml
     fi
 
     # Support a custom deployment for shipyard developers
@@ -181,7 +181,7 @@ function genesis {
     apt -y install docker.io jq
 
     # Generate certificates
-    docker run --rm -t -w /target -v $(pwd)/configs:/target ${PROMENADE_IMAGE} promenade generate-certs -o /target $(ls ./configs)
+    docker run -e "http_proxy=$PROXY_ADDRESS" -e "https_proxy=$PROXY_ADDRESS" --rm -t -w /target -v $(pwd)/configs:/target ${PROMENADE_IMAGE} promenade generate-certs -o /target $(ls ./configs)
 
     if [[ $? -ne 0 ]]
     then
@@ -190,7 +190,7 @@ function genesis {
     fi
 
     # Generate promenade join artifactos
-    docker run --rm -t -w /target -v $(pwd)/configs:/target ${PROMENADE_IMAGE} promenade build-all -o /target --validators $(ls ./configs)
+    docker run -e "http_proxy=$PROXY_ADDRESS" -e "https_proxy=$PROXY_ADDRESS" --rm -t -w /target -v $(pwd)/configs:/target ${PROMENADE_IMAGE} promenade build-all -o /target --validators $(ls ./configs)
 
     if [[ $? -ne 0 ]]
     then
